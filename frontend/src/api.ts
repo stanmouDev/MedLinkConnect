@@ -1,5 +1,8 @@
 export const API_BASE =
-  (import.meta.env.VITE_API_BASE as string) || 'http://localhost:8000/api';
+  (import.meta.env.VITE_API_BASE as string) ||
+  (import.meta.env.PROD
+    ? 'https://medlink-connect-api.onrender.com/api'
+    : 'http://localhost:8000/api');
 
 export type User = {
   id: number;
