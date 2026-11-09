@@ -49,8 +49,8 @@ These fixed demo credentials and sample patient records are public in the source
 This repository includes a Render Blueprint for the Django API and PostgreSQL database, plus Vercel configuration for the React frontend.
 
 1. In Render, create a new Blueprint from this repository and apply `render.yaml`. The Blueprint provisions the API and database on their Free plans.
-2. In Vercel, import this repository as a project, set the Root Directory to `frontend`, and set the project name to `medlink-connect`. The Vercel project name determines its default URL, `https://medlink-connect.vercel.app`, which is allowed by the API's CORS configuration.
-3. If Vercel assigns a different production URL, update `CORS_ALLOWED_ORIGINS` on the Render API to that exact origin and redeploy.
+2. In Vercel, import this repository as a project and set the Root Directory to `frontend`. If you deploy by uploading the folder, use the deployed Vercel URL shown after the upload.
+3. Set `CORS_ALLOWED_ORIGINS` on the Render API to the exact Vercel deployment origin (scheme and hostname, without a path), then redeploy the API.
 
 The frontend defaults to the Render API URL in production builds. If you use a different Render service name, set `VITE_API_BASE` in Vercel to `https://<your-render-service>.onrender.com/api` and redeploy.
 
