@@ -21,7 +21,7 @@ services:
           name: medlink-connect-db
           property: connectionString
       - key: CORS_ALLOWED_ORIGINS
-        value: https://frontend-efuej71cc-ifesorchukwufelix-1426.vercel.app
+        value: https://frontend-efuej71cc-ifesorchukwufelix-1426.vercel.app,https://frontend-nine-orcin-53.vercel.app
       - key: SECURE_SSL_REDIRECT
         value: "True"
 
