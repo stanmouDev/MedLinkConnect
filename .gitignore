@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.db
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environment files
+**/.env*
+!**/.env.example
+
+# Frontend
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Local screenshots may contain patient information
+/frontend/after-login.png
+/frontend/doctor-workspace.png
+/frontend/login-filled.png
+/frontend/login-page.png
+/frontend/patients-page.png
+
+# Generated coverage output
+coverage/

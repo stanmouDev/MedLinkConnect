@@ -1,0 +1,14 @@
+export { default as MidwifeWorkspace } from './MidwifeWorkspace';
+export { default as RoleWorkspace } from './RoleWorkspace';
+export { default as DoctorWorkspace } from './DoctorWorkspace';
+export { default as NurseWorkspace } from './NurseWorkspace';
+export { default as LabWorkspace } from './LabWorkspace';
+export { default as PharmacyWorkspace } from './PharmacyWorkspace';
+export { default as BillingWorkspace } from './BillingWorkspace';
+export { default as ReceptionWorkspace } from './ReceptionWorkspace';
+export { default as MedicalRecordsWorkspace } from './MedicalRecordsWorkspace';
+export { default as AdministratorWorkspace } from './AdministratorWorkspace';
+export { default as PatientWorkspace } from './PatientWorkspace';
+export { default as Consultation } from './Consultation';
+export { default as PatientHeader } from './PatientHeader';
+export { default as WorkspaceShell } from './WorkspaceShell';
