@@ -56,5 +56,14 @@ The frontend defaults to the Render API URL in production builds. If you use a d
 
 **Free-tier and health-data warning:** this setup is for demos with synthetic data only, not clinical or production use. Render's free API service can sleep after 15 minutes of inactivity, and its free PostgreSQL database expires after 30 days and has no backups. Do not enter real patient or other sensitive health information. The API database starts empty; create your own account rather than running `seed_demo`.
 
+### Create the first production administrator
+
+The free Render web service does not provide Shell access. To create the first administrator without putting a password in source code or chat:
+
+1. In the Render API service's **Environment** settings, add `BOOTSTRAP_ADMIN_USERNAME` and `BOOTSTRAP_ADMIN_PASSWORD`. Choose a unique password with at least 16 characters. Optionally add `BOOTSTRAP_ADMIN_EMAIL`.
+2. Save the variables and redeploy the API. Its startup command creates the administrator once, with the `administrator` role.
+3. After the deploy succeeds, remove all `BOOTSTRAP_ADMIN_*` variables from Render and save. The command will leave the created account unchanged on later restarts.
+4. Sign in to the Vercel app with the username and password you chose. Do not use the published demo credentials on the public deployment.
+
 ## Notes
 The AI assistant is optional and should be implemented as an advisory layer only. Suggestions must clearly state they are not a replacement for professional medical judgment.

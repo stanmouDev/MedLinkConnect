@@ -1,8 +1,12 @@
 import json
+import os
+from io import StringIO
 from datetime import timedelta
+from unittest.mock import patch
 from django.test import TestCase, Client
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.core.management import call_command, CommandError
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from .models import (
@@ -28,6 +32,57 @@ User = get_user_model()
 def _auth_headers(user):
     token, _ = Token.objects.get_or_create(user=user)
     return {'HTTP_AUTHORIZATION': f'Token {token.key}'}
+
+
+class BootstrapAdminCommandTests(TestCase):
+    def test_creates_administrator_with_environment_credentials(self):
+        with patch.dict(os.environ, {
+            'BOOTSTRAP_ADMIN_USERNAME': 'initial-admin',
+            'BOOTSTRAP_ADMIN_PASSWORD': 'a-unique-password-with-16-chars',
+            'BOOTSTRAP_ADMIN_EMAIL': 'admin@example.com',
+        }):
+            call_command('bootstrap_admin', stdout=StringIO())
+
+        user = User.objects.get(username='initial-admin')
+        self.assertTrue(user.is_superuser)
+        self.assertTrue(user.is_staff)
+        self.assertEqual(user.role, 'administrator')
+        self.assertEqual(user.email, 'admin@example.com')
+
+    def test_skips_when_bootstrap_credentials_are_not_set(self):
+        with patch.dict(os.environ, {}, clear=True):
+            output = StringIO()
+            call_command('bootstrap_admin', stdout=output)
+
+        self.assertIn('skipped', output.getvalue())
+        self.assertFalse(User.objects.exists())
+
+    def test_rejects_short_password(self):
+        with patch.dict(os.environ, {
+            'BOOTSTRAP_ADMIN_USERNAME': 'initial-admin',
+            'BOOTSTRAP_ADMIN_PASSWORD': 'too-short',
+        }):
+            with self.assertRaises(CommandError):
+                call_command('bootstrap_admin', stdout=StringIO())
+
+        self.assertFalse(User.objects.exists())
+
+    def test_does_not_change_existing_administrator(self):
+        original = User.objects.create_superuser(
+            username='initial-admin',
+            password='original-password',
+            role='administrator',
+        )
+        with patch.dict(os.environ, {
+            'BOOTSTRAP_ADMIN_USERNAME': 'initial-admin',
+            'BOOTSTRAP_ADMIN_PASSWORD': 'a-different-password-with-16-chars',
+        }):
+            output = StringIO()
+            call_command('bootstrap_admin', stdout=output)
+
+        original.refresh_from_db()
+        self.assertTrue(original.check_password('original-password'))
+        self.assertIn('no changes made', output.getvalue())
 
 
 class APIAuthTests(TestCase):
